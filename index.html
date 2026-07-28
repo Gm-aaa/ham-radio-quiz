@@ -9,8 +9,15 @@
 <body>
 <div id="app">
   <header>
-    <h1>业余无线电刷题</h1>
+    <div class="header-top">
+      <h1>业余无线电刷题</h1>
+      <div class="header-actions">
+        <button id="btn-theme" class="icon-btn" title="切换主题">🌙</button>
+        <button id="btn-about" class="icon-btn" title="关于">ℹ️</button>
+      </div>
+    </div>
     <p class="subtitle">CRAC 2025版题库</p>
+    <p class="shuffle-note">练习时每题的选项顺序都会随机打乱——因为正式考试的选项顺序也是随机的。请认准选项内容作答，不要死记字母位置。</p>
   </header>
 
   <nav id="mode-nav">
@@ -44,7 +51,9 @@
       <div id="q-meta"></div>
       <div id="q-text"></div>
       <div id="q-options"></div>
+      <div id="q-answer-text" class="hidden"></div>
       <div id="q-actions">
+        <button id="btn-prev">上一题</button>
         <button id="btn-confirm" class="hidden">确认提交</button>
         <button id="btn-next" class="hidden">下一题</button>
       </div>
@@ -63,6 +72,24 @@
     <span id="stats-text"></span>
   </footer>
 </div>
+
+<div id="about-modal" class="modal hidden">
+  <div class="modal-content">
+    <h2>关于</h2>
+    <p>本题库数据来源于中国无线电协会业余无线电分会（CRAC）发布的 2025 版业余无线电台操作技术能力验证题库。</p>
+    <p><strong>题库来源：</strong></p>
+    <ul>
+      <li><a href="https://www.crac.org.cn/?p=1287" target="_blank" rel="noopener">CRAC 官方题库发布页</a></li>
+      <li><a href="https://zhuanlan.zhihu.com/p/2012845316643251467" target="_blank" rel="noopener">知乎题库整理文章</a></li>
+    </ul>
+    <p><strong>项目仓库：</strong></p>
+    <ul>
+      <li><a href="https://github.com/Gm-aaa/ham-radio-quiz" target="_blank" rel="noopener">Gm-aaa/ham-radio-quiz</a></li>
+    </ul>
+    <button id="btn-close-about">关闭</button>
+  </div>
+</div>
+
 <script src="app.js"></script>
 </body>
 </html>
