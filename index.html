@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>业余无线电刷题</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1>业余无线电刷题</h1>
+    <p class="subtitle">CRAC 2025版题库</p>
+  </header>
+
+  <nav id="mode-nav">
+    <button class="mode-btn active" data-mode="practice">顺序练习</button>
+    <button class="mode-btn" data-mode="exam">随机模考</button>
+    <button class="mode-btn" data-mode="wrong">错题本</button>
+  </nav>
+
+  <div id="filters">
+    <div class="filter-group">
+      <label>类别：</label>
+      <button class="cat-btn active" data-cat="A">A类</button>
+      <button class="cat-btn" data-cat="B">B类</button>
+      <button class="cat-btn" data-cat="C">C类</button>
+    </div>
+    <div class="filter-group" id="section-filter">
+      <label>章节：</label>
+      <select id="section-select">
+        <option value="all">全部章节</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="progress-bar">
+    <div id="progress-fill"></div>
+    <span id="progress-text">0/0</span>
+  </div>
+
+  <main id="quiz-area">
+    <div id="question-card">
+      <div id="q-meta"></div>
+      <div id="q-text"></div>
+      <div id="q-options"></div>
+      <div id="q-actions">
+        <button id="btn-confirm" class="hidden">确认提交</button>
+        <button id="btn-next" class="hidden">下一题</button>
+      </div>
+      <div id="q-explanation" class="hidden"></div>
+    </div>
+  </main>
+
+  <div id="exam-result" class="hidden">
+    <h2>模考结果</h2>
+    <p id="result-score"></p>
+    <p id="result-pass"></p>
+    <button id="btn-restart">再来一次</button>
+  </div>
+
+  <footer>
+    <span id="stats-text"></span>
+  </footer>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
