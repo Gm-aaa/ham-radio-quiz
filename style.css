@@ -183,6 +183,58 @@ header { text-align: center; margin-bottom: 16px; }
   color: var(--text);
 }
 
+#jump-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+#jump-hint {
+  font-size: 0.72rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0 0 12px;
+}
+
+#jump-hint code {
+  background: var(--border);
+  border-radius: 3px;
+  padding: 1px 5px;
+  font-size: 0.7rem;
+}
+
+#jump-input {
+  width: 120px;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 0.85rem;
+  background: var(--card);
+  color: var(--text);
+}
+
+#jump-input.jump-error { border-color: var(--wrong); }
+
+#btn-jump {
+  padding: 6px 16px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--card);
+  color: var(--text);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+#btn-jump:hover { border-color: var(--primary); color: var(--primary); }
+
+#jump-msg {
+  align-self: center;
+  font-size: 0.8rem;
+  color: var(--wrong);
+  line-height: 1.4;
+}
+
 #question-card {
   background: var(--card);
   border-radius: var(--radius);

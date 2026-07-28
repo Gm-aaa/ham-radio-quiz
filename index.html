@@ -46,6 +46,13 @@
     <span id="progress-text">0/0</span>
   </div>
 
+  <div id="jump-bar">
+    <input id="jump-input" type="text" placeholder="题号 或 第N题" aria-label="跳转到题号">
+    <button id="btn-jump" type="button">跳转</button>
+    <span id="jump-msg" role="status"></span>
+  </div>
+  <p id="jump-hint">纯数字按题号跳转（如 <code>99</code> → 0099题）；<code>第N题</code> 按当前进度跳转（如 <code>第99题</code> → 当前第99个，与进度条一致）</p>
+
   <main id="quiz-area">
     <div id="question-card">
       <div id="q-meta"></div>

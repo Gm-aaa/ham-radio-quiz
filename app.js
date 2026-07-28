@@ -225,7 +225,7 @@
       content: q.options[orig],
     }));
 
-    $("#q-meta").textContent = `#${q.id} | 旧题号:${q.oldId} | 章节:${q.section} | ${isMulti ? "多选" : "单选"} | 分类:${q.categories.join("/")}`;
+    $("#q-meta").textContent = `#${q.id} | 章节:${q.section} | ${isMulti ? "多选" : "单选"} | 分类:${q.categories.join("/")}`;
     $("#q-text").textContent = q.question;
 
     const optionsDiv = $("#q-options");
@@ -378,6 +378,78 @@
     card.appendChild(p);
   }
 
+  let jumpMsgTimer;
+  function showJumpMsg(text) {
+    const msg = $("#jump-msg");
+    clearTimeout(jumpMsgTimer);
+    msg.textContent = text;
+    if (text) {
+      jumpMsgTimer = setTimeout(() => { msg.textContent = ""; }, 2500);
+    }
+  }
+
+  function flashJumpError(input) {
+    input.classList.add("jump-error");
+    input.value = "";
+    setTimeout(() => input.classList.remove("jump-error"), 1000);
+  }
+
+  function doJump(idx) {
+    showJumpMsg("");
+    currentIndex = idx;
+    $("#exam-result").classList.add("hidden");
+    $("#question-card").classList.remove("hidden");
+    renderQuestion();
+  }
+
+  function jumpToQuestion() {
+    const input = $("#jump-input");
+    const raw = input.value.trim();
+    if (!raw || currentSet.length === 0) return;
+
+    // "第N题" / "第N个" → 按当前题目集的位置跳转
+    const posMatch = raw.match(/^第\s*(\d+)\s*[题个]?$/);
+    if (posMatch) {
+      const pos = parseInt(posMatch[1], 10);
+      if (pos >= 1 && pos <= currentSet.length) {
+        doJump(pos - 1);
+        input.value = "";
+      } else {
+        showJumpMsg(`当前共 ${currentSet.length} 题，无第 ${pos} 题`);
+        flashJumpError(input);
+      }
+      return;
+    }
+
+    // 纯数字 → 按题号跳转
+    const num = parseInt(raw, 10);
+    const idx = Number.isNaN(num)
+      ? -1
+      : currentSet.findIndex((q) => parseInt(q.id, 10) === num);
+
+    if (idx !== -1) {
+      doJump(idx);
+      input.value = "";
+      return;
+    }
+
+    let msg;
+    if (Number.isNaN(num)) {
+      msg = `未找到题号 ${raw}`;
+    } else {
+      const match = allQuestions.find((q) => parseInt(q.id, 10) === num);
+      if (!match) {
+        msg = `未找到题号 ${raw}`;
+      } else if (!match.categories.includes(category)) {
+        msg = `题号 ${match.id} 属于 ${match.categories.join("/")} 类`;
+      } else {
+        msg = `题号 ${match.id} 不在当前题目范围内`;
+      }
+    }
+    showJumpMsg(msg);
+    flashJumpError(input);
+  }
+
   // Theme
   function applyTheme(dark) {
     document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
@@ -427,6 +499,12 @@
   $("#btn-next").addEventListener("click", () => {
     currentIndex++;
     renderQuestion();
+  });
+
+  $("#btn-jump").addEventListener("click", jumpToQuestion);
+
+  $("#jump-input").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") jumpToQuestion();
   });
 
   $("#btn-restart").addEventListener("click", () => {
