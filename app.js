@@ -212,7 +212,9 @@
     answered = false;
     selectedOptions = new Set();
 
-    const isMulti = q.type !== "MC1";
+    // The answer is the source of truth for interaction behavior. A few source
+    // questions are mislabeled as MC1 despite having multiple correct answers.
+    const isMulti = q.answer.length > 1;
 
     // Shuffle option CONTENT but keep display letters A,B,C,D fixed top-to-bottom.
     // currentMapping[i] = { display, orig, content }
