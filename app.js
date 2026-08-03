@@ -307,7 +307,13 @@
 
     totalAnswered++;
     if (isCorrect) correctCount++;
-    saveWrongId(q.id, !isCorrect);
+    // Wrong answers are collected in every mode. A correct answer only removes
+    // the question when the user is actively reviewing the wrong-answer book.
+    if (!isCorrect) {
+      saveWrongId(q.id, true);
+    } else if (mode === "wrong") {
+      saveWrongId(q.id, false);
+    }
 
     // Show correct answer as text
     const answerText = $("#q-answer-text");
