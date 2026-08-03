@@ -326,6 +326,7 @@ header { text-align: center; margin-bottom: 16px; }
 #btn-prev:disabled { opacity: 0.4; cursor: not-allowed; }
 #btn-confirm { background: var(--primary); color: #fff; }
 #btn-next { background: var(--text); color: var(--bg); }
+#btn-next-section { background: var(--primary); color: #fff; }
 
 #q-explanation {
   margin-top: 16px;

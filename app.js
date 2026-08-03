@@ -203,7 +203,7 @@
       if (mode === "exam") {
         showExamResult();
       } else {
-        showCardMessage("本组题目已全部完成");
+        showCardMessage("本组题目已全部完成", true);
       }
       return;
     }
@@ -228,7 +228,10 @@
     }));
 
     $("#q-meta").textContent = `#${q.id} | 章节:${q.section} | ${isMulti ? "多选" : "单选"} | 分类:${q.categories.join("/")}`;
-    $("#q-text").textContent = q.question;
+    const questionText = $("#q-text");
+    questionText.textContent = q.question;
+    questionText.classList.remove("empty-msg");
+    questionText.style.color = "";
 
     const optionsDiv = $("#q-options");
     optionsDiv.textContent = "";
@@ -251,6 +254,8 @@
 
     $("#btn-confirm").classList.toggle("hidden", !isMulti);
     $("#btn-next").classList.add("hidden");
+    $("#btn-next-section").classList.add("hidden");
+    $("#btn-prev").classList.remove("hidden");
     $("#btn-prev").disabled = currentIndex === 0;
     $("#q-answer-text").classList.add("hidden");
     $("#q-explanation").classList.add("hidden");
@@ -371,13 +376,36 @@
     renderQuestion();
   }
 
-  function showCardMessage(text) {
-    const card = $("#question-card");
-    card.textContent = "";
-    const p = document.createElement("p");
-    p.className = "empty-msg";
-    p.textContent = text;
-    card.appendChild(p);
+  function getNextSection() {
+    if (section === "all") return null;
+
+    const sections = [...$("#section-select").options]
+      .map((option) => option.value)
+      .filter((value) => value !== "all");
+    const currentSectionIndex = sections.indexOf(section);
+    return currentSectionIndex >= 0 ? sections[currentSectionIndex + 1] || null : null;
+  }
+
+  function showCardMessage(text, offerNextSection = false) {
+    // Keep the card's DOM intact so another mode/category/section can render
+    // questions after this message has been shown.
+    $("#q-meta").textContent = "";
+    const questionText = $("#q-text");
+    questionText.textContent = text;
+    questionText.classList.add("empty-msg");
+    questionText.style.color = "";
+    $("#q-options").textContent = "";
+    $("#q-answer-text").classList.add("hidden");
+    $("#q-explanation").classList.add("hidden");
+
+    const nextSection = offerNextSection ? getNextSection() : null;
+    $("#btn-prev").classList.add("hidden");
+    $("#btn-confirm").classList.add("hidden");
+    $("#btn-next").classList.add("hidden");
+    $("#btn-next-section").classList.toggle("hidden", !nextSection);
+    $("#q-actions").classList.toggle("hidden", !nextSection);
+
+    updateProgress();
   }
 
   let jumpMsgTimer;
@@ -503,6 +531,14 @@
     renderQuestion();
   });
 
+  $("#btn-next-section").addEventListener("click", () => {
+    const nextSection = getNextSection();
+    if (!nextSection) return;
+    section = nextSection;
+    $("#section-select").value = nextSection;
+    startQuiz();
+  });
+
   $("#btn-jump").addEventListener("click", jumpToQuestion);
 
   $("#jump-input").addEventListener("keydown", (e) => {
@@ -545,11 +581,7 @@
       startQuiz();
     })
     .catch((err) => {
-      const card = $("#question-card");
-      card.textContent = "";
-      const p = document.createElement("p");
-      p.style.color = "var(--wrong)";
-      p.textContent = `加载题库失败: ${err.message}`;
-      card.appendChild(p);
+      showCardMessage(`加载题库失败: ${err.message}`);
+      $("#q-text").style.color = "var(--wrong)";
     });
 })();
